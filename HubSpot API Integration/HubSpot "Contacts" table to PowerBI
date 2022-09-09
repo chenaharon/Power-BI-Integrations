@@ -1,0 +1,19 @@
+---------- In Power BI ----------
+Blank query >> Write and execute the query below >> Convert to table >> Open the lists and expend the columns you want
+---------------------------------
+
+let
+    Contacts = List.Skip(List.Generate( () => [IsMore = null, Offset = 0, Counter = 0], // Init
+                                            each [IsMore] <> false ,// Whilst this is true, keep going
+                                            each [Content = Json.Document(Web.Contents("https://api.hubapi.com/contacts/v1/lists/all/contacts/all?hapikey=9cc9f019-e627-473f-b104-281d973b4812&property=firstname&property=lastname&property=createdate&property=email&propertyMode=value_and_history&count=100&vidOffset=" & Text.From(Offset))),// retrieve results per call
+                                                Offset = try [Content][#"vid-offset"] otherwise 0,
+                                                IsMore = if [Counter] < 1 then null
+                                                            else [Content][#"has-more"],
+                                                            Counter = [Counter] + 1,
+                                                            Table = Table.FromRecords(Content[contacts])    
+                                                ],
+                                            each [Table]
+                                    ),1
+                        )
+in
+    Contacts
