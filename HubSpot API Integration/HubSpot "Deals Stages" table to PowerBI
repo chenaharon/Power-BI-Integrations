@@ -1,0 +1,8 @@
+---------- In Power BI ----------
+Blank query >> Write and execute the query below >> Convert to table >> Open the lists and expend the columns you want
+---------------------------------
+
+let
+    Deals_Stages = Json.Document(Web.Contents("https://api.hubapi.com/crm/v3/pipelines/deals/***YOUR***PIPELINEID***FROM***HUBSPOT***"/stages?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***"))
+in
+    Deals_Stages
