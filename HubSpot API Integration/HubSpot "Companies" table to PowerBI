@@ -5,7 +5,7 @@ Blank query >> Write and execute the query below >> Convert to table >> Open the
 let
     Companies = List.Skip(List.Generate( () => [IsMore = null, Offset = 0, Counter = 0],
                                             each [IsMore] <> false ,
-                                            each [Content = Json.Document(Web.Contents("https://api.hubapi.com/companies/v2/companies/paged?hapikey=9cc9f019-e627-473f-b104-281d973b4812&limit=250&properties=name&properties=city&offset=" & Text.From(Offset))),
+                                            each [Content = Json.Document(Web.Contents("https://api.hubapi.com/companies/v2/companies/paged?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***&limit=250&properties=name&properties=city&offset=" & Text.From(Offset))),
                                                 Offset = try [Content][#"offset"] otherwise 0,
                                                 IsMore = if [Counter] < 1 then null
                                                             else [Content][#"has-more"],
