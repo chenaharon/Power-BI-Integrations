@@ -1,5 +1,6 @@
 ---------- In Power BI ----------
-Get data >> Blank Query
+Get data >> Blank query >> Write and execute the query below
+---------------------------------
 
 let
 Deals = Json.Document(Web.Contents("https://api.hubapi.com/deals/v1/deal/paged?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***&includeAssociations=true&properties=amount&properties=dealstage&properties=hs_deal_stage_probability&properties=closedate"))
