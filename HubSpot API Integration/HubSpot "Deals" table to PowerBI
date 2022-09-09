@@ -1,8 +1,8 @@
 ---------- In Power BI ----------
-Get data >> Blank query >> Write and execute the query below
+Blank query >> Write and execute the query below >> Convert to table >> Open the lists and expend the columns you want
 ---------------------------------
 
 let
-Deals = Json.Document(Web.Contents("https://api.hubapi.com/deals/v1/deal/paged?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***&includeAssociations=true&properties=amount&properties=dealstage&properties=hs_deal_stage_probability&properties=closedate"))
+    Deals = Json.Document(Web.Contents("https://api.hubapi.com/deals/v1/deal/paged?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***&includeAssociations=true&properties=amount&properties=dealstage&properties=hs_deal_stage_probability&properties=closedate"))
 in
-Deals
+    Deals
