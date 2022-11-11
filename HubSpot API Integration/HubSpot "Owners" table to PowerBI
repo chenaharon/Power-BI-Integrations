@@ -1,8 +1,0 @@
----------- In Power BI ----------
-Blank query >> Write and execute the query below >> Convert to table >> Open the lists and expend the columns you want
----------------------------------
-
-let
-    Owners = Json.Document(Web.Contents("https://api.hubapi.com/owners/v2/owners?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***"))
-in
-    Owners
