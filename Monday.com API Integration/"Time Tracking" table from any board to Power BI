@@ -1,3 +1,7 @@
+---------- In Power BI ----------
+Blank query >> Write and execute the query below >>  Expend the columns you want
+---------------------------------
+
 let
     Key = ***YOUR***API***TOKEN***,
     Board = ***YOUR***BOARD***ID***,
