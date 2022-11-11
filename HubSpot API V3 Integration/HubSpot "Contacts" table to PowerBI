@@ -6,7 +6,7 @@ let
     contacts_v3 = List.RemoveLastN(List.RemoveFirstN(List.Generate( 
                                     () =>  [nextPage = 0, hasMore = null, counter = 0],
                                         each [counter] <> 2,
-                                        each [content = Json.Document(Web.Contents("https://api.hubapi.com/crm/v3/objects/contacts?limit=100&archived=false&property=firstname&property=lastname&property=createdate&property=email&propertyMode=value_and_history&after=" & Text.From([nextPage]),[Headers=[#"Content-Type" = "application/json", Authorization="Bearer ***YOUR***Bearer***TOKEN***FROM***HUBSPOT***"]])),
+                                        each [content = Json.Document(Web.Contents("https://api.hubapi.com/crm/v3/objects/contacts?limit=100&archived=false&property=firstname&property=lastname&property=createdate&property=email&propertyMode=value_and_history&after=" & Text.From([nextPage]),[Headers=[#"Content-Type" = "application/json", Authorization="Bearer ***YOUR***BEARER***TOKEN***FROM***HUBSPOT***"]])),
                                               Table = Table.FromRecords(content[results]),
                                                 nextPage = Number.FromText(content[paging][next][after]),
                                                 hasMore = try content[paging][next][after] otherwise 0,
