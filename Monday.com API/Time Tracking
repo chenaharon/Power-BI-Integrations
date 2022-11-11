@@ -1,0 +1,16 @@
+let
+    Key = ***YOUR***API***TOKEN***,
+    Board = ***YOUR***BOARD***ID***,
+    Source = Web.Contents("https://api.monday.com/v2",
+    [Headers=[#"Method"="POST",#"Content-Type"="application/json",#"Authorization"="Bearer " & Key],
+	Content=Text.ToBinary("{""query"": ""query { boards(ids: " & Board & ") { items { columns: column_values(ids: [item_id, time_tracking]) { title, ,text, value} } } }""}")
+    ]),
+    Data = Table.FromList(Json.Document(Source)[data][boards]{0}[items], Record.FieldValues, { "Columns"}),
+    TimeTrack = Table.FromRecords(Table.TransformRows(Data, each 
+        List.Accumulate([Columns], [
+        ], (state, current) => Record.AddField(state, current[title], if current[value] <> null or current[value] = ""  then current[value] else current[text]) ) 
+    )),
+    #"Replaced Value" = Table.ReplaceValue(TimeTrack,"","{}",Replacer.ReplaceValue,{"Time Tracking"}),
+    #"Parsed JSON" = Table.TransformColumns(#"Replaced Value",{{"Time Tracking", Json.Document}})
+in
+    #"Parsed JSON"
