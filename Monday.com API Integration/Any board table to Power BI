@@ -1,0 +1,21 @@
+---------- In Power BI ----------
+Blank query >> Write and execute the query below
+---------------------------------
+
+let
+    Key = ***YOUR***API***TOKEN***,
+    Board = ***YOUR***BOARD***ID***,
+    Source = Web.Contents("https://api.monday.com/v2",
+    [Headers=[#"Method"="POST",#"Content-Type"="application/json",#"Authorization"="Bearer " & Key],
+	Content=Text.ToBinary("{""query"": ""query { boards(ids: " & Board & ") { items { name, updated_at, group { title }, columns: column_values { title, text} } } }""}")
+    ]),
+    Data = Table.FromList(Json.Document(Source)[data][boards]{0}[items], Record.FieldValues, {"Title", "UpdatedAt", "Group", "Columns"}),
+    Tasks = Table.FromRecords(Table.TransformRows(Data, each 
+        List.Accumulate([Columns], [
+            Title = [Title],
+            UpdateDate = [UpdatedAt],
+            Group = [Group][title]
+        ], (state, current) => Record.AddField(state, current[title], current[text]) ) 
+    ))
+in
+    Tasks
