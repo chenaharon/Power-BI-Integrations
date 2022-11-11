@@ -1,8 +1,20 @@
 ---------- In Power BI ----------
 Blank query >> Write and execute the query below >> Convert to table >> Open the lists and expend the columns you want
 ---------------------------------
-
+    
 let
-    Deals_Stages = Json.Document(Web.Contents("https://api.hubapi.com/crm/v3/pipelines/deals/***YOUR***PIPELINEID***FROM***HUBSPOT***"/stages?hapikey=***YOUR***API***TOKEN***FROM***HUBSPOT***"))
+    deal_stage_v3 = List.RemoveLastN(List.RemoveFirstN(List.Generate( 
+                                        () =>  [nextPage = 0, hasMore = null, counter = 0],
+                                            each [counter] <> 2,
+                                            each [content = Json.Document(Web.Contents("https://api.hubapi.com",
+                                                 [RelativePath = "crm/v3/pipelines/deals/***YOUR***PIPELINEID***FROM***HUBSPOT***/stages" ,Query = [limit = "100", archived="false", after = Text.From([nextPage])],Headers=[#"Content-Type" = "application/json", Authorization="Bearer ***YOUR***API***BEARER***FROM***HUBSPOT***"]])),
+                                                Table = Table.FromRecords(content[results]),
+                                                nextPage = Number.FromText(content[paging][next][after]),
+                                                hasMore = try content[paging][next][after] otherwise 0,
+                                                counter = if [hasMore] = 0 then [counter] + 1
+                                                                            else 0
+                                                ],
+                                            each [Table]                             
+                                    ),1),1)
 in
-    Deals_Stages
+    deal_stage_v3
